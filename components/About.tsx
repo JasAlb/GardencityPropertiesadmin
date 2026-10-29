@@ -45,20 +45,14 @@ export default function About() {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="group relative min-h-[380px] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl transition-all duration-300 hover:border-sky-400/50 hover:shadow-[0_0_36px_rgba(56,189,248,0.2)]"
         >
-          {/* Animated Background Image with Continuous Smooth Zoom */}
-          <motion.img
-            src="/animation.jpeg"
-            alt="Garden City Properties operating principle"
+          {/* Background Looping Video */}
+          <video
+            src="/ani.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
             className="absolute inset-0 h-full w-full object-cover"
-            initial={{ scale: 1 }}
-            animate={{
-              scale: [1, 1.08, 1],
-            }}
-            transition={{
-              duration: 14,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
           />
 
           {/* Gradient Overlay for Text Readability */}

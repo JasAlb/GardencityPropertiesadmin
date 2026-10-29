@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
@@ -120,6 +120,17 @@ export default function Contact() {
             >
               <Phone size={18} />
               +968 9495068217
+            </a>
+            <a
+              href="https://maps.app.goo.gl/hfGpoHSPzP3bEzrE6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm text-sky-200 transition hover:border-sky-400/40"
+            >
+              <MapPin size={18} className="mt-0.5 shrink-0 text-sky-400" />
+              <span className="leading-snug break-words">
+                Office No 11, Po Box 275, Pc 117, Mawelah North, Sultanate Oman
+              </span>
             </a>
           </div>
           <p className="mt-10 text-xs tracking-[0.2em] text-sky-200/80 uppercase">

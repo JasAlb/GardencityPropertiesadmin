@@ -59,7 +59,7 @@ export default function Leadership() {
                 </p>
 
                 {/* Extended Biography */}
-                <p className="mt-5 flex-1 font-sans text-sm font-normal leading-relaxed text-slate-200/90 antialiased tracking-normal sm:text-[15px] sm:leading-7">
+                <p className="mt-5 flex-1 font-sans text-sm font-normal leading-relaxed text-slate-200/90 antialiased tracking-normal text-justify sm:text-[15px] sm:leading-7">
                   {leader.bio}
                 </p>
 

@@ -10,19 +10,22 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative isolate min-h-[92vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gray-800">
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0 bg-[#050816]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/hero-bg.jpg"
-          alt="Oman skyline and premium properties"
-          className="h-full w-full object-cover"
+          src="/bg1stpage.jpeg"
+          alt="Garden City Properties Oman skyline"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
       </div>
-      <div className="absolute inset-0 bg-slate-950/75" />
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-cyan-950/30 rtl:bg-gradient-to-l" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050816] to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-5 py-28 sm:px-8">
+      {/* Lightened Overlay: reveals natural brightness & details while maintaining crisp text readability */}
+      <div className="absolute inset-0 z-0 bg-black/45" />
+      <div className="absolute inset-x-0 bottom-0 z-0 h-28 bg-gradient-to-t from-[#050816] to-transparent" />
+
+      {/* Foreground Content */}
+      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-5 py-28 sm:px-8">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

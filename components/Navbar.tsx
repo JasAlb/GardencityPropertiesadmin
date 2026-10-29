@@ -23,24 +23,14 @@ export default function Navbar() {
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <a
           href="#home"
-          className="flex items-center gap-3 focus:outline-none"
+          className="flex items-center focus:outline-none"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo-main.jpeg"
+            src="/Logo.jpeg"
             alt="Garden City Properties"
-            width={48}
-            height={48}
-            className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+            className="h-11 sm:h-14 w-auto object-contain"
           />
-          <div className="flex flex-col justify-center">
-            <span className="text-lg md:text-xl font-extrabold tracking-wide text-white">
-              GARDEN<span className="text-amber-500">CITY</span>
-            </span>
-            <span className="text-[0.65rem] md:text-xs tracking-[0.3em] text-cyan-400 uppercase font-medium">
-              Properties
-            </span>
-          </div>
         </a>
 
         <div className="hidden items-center gap-6 lg:flex xl:gap-8">

@@ -24,16 +24,16 @@ const dictionaries = {
     },
     hero: {
       badge: "Oman · Consultancy · Assets",
-      title: "Your Trusted Property Consultant & Real Estate Partner in Oman",
+      title: "Gardencity properies your trusted realestate partner in oman",
       subtitle:
-        "Delivering professional, reliable, and tailored solutions to maximize the value of your assets.",
+        "•property sales •Expert valuation's •Smarter Investments.",
       explore: "Explore Services",
       contact: "Contact Us",
     },
     about: {
       eyebrow: "About Us",
-      title: "Consultancy-grade real estate for a precision market.",
-      body: "GARDENCITY PROPERTIES is a trusted real estate consultancy in Oman. We are committed to delivering professional, reliable, and tailored solutions that meet the diverse needs of property owners, investors, developers, and corporate clients.",
+      title: "Gardencity properties.",
+      body: "Established in 2007, one of Oman’s trusted names in real estate valuation and consultancy, backed by a multidisciplinary team of engineers, surveyors, and property specialists Your Trusted Real Estate Partner in Oman.",
       stats: [
         { value: "Oman", label: "Market focus" },
         { value: "360°", label: "Asset advisory" },
@@ -48,17 +48,27 @@ const dictionaries = {
       generalManager: "General Manager",
       leaders: [
         {
-          src: "/MD.png",
-          name: "Mr Mohamed al harthi",
+          src: "/MD.jpg",
+          name: "MR MOHAMED AL HARTHY",
           title: "Managing Director",
-          bio: "As the Managing Director of Garden City Properties Oman, I bring extensive expertise in real estate brokerage, property management, asset valuation, and quantity surveying. With a strategic vision and in-depth understanding of the Omani real estate market, I focus on identifying valuable investment opportunities and delivering tailored property solutions. My commitment to professionalism, integrity, and client satisfaction drives me to provide reliable, innovative, and results-oriented services that create long-term value for our clients and partners.",
+          bio: (
+            <>
+              The Founder and Managing Director of GARDENCITY PROPERTIES Oman, I bring approximately 18 years of extensive professional experience in real estate brokerage, property management, asset valuation, and quantity surveying.
+              <br />
+              <br />
+              Drawing on nearly two decades of industry expertise and an in-depth understanding of the Omani real estate market, I founded Garden City Properties with a vision to deliver comprehensive, innovative, and reliable real estate solutions. My focus is on identifying strategic investment opportunities, maximising property value, and providing tailored services that meet the needs of individuals, investors, businesses, and financial institutions.
+              <br />
+              <br />
+              Driven by professionalism, integrity, and a commitment to excellence, I strive to build lasting client relationships and establish Garden City Properties as a trusted name in Oman&apos;s real estate sector, creating sustainable long-term value for our clients and partners.
+            </>
+          ),
           email: "gardencityin@gmail.com",
           phone: "+968 97300200",
           phoneHref: "tel:+96897300200",
         },
         {
-          src: "/GM.png",
-          name: "Mr Adam al harthi",
+          src: "/GM.jpeg",
+          name: "MR ADAM AL HARTHI",
           title: "General Manager",
           bio: "At Garden City Properties Oman, we are committed to delivering exceptional real estate brokerage, property management, asset valuation, and quantity surveying services. With our in-depth understanding of the Omani property market and broad experience in real estate, we provide tailored solutions to meet the diverse needs of our clients. Our goal is to help investors make informed property decisions, identify valuable investment opportunities, and achieve sustainable, long-term returns through professional advice, reliable service, and a commitment to excellence.",
           email: "gardencityin@gmail.com",
@@ -69,35 +79,48 @@ const dictionaries = {
     },
     services: {
       eyebrow: "Our Services",
-      title: "End-to-end property capability.",
+      title: "",
       subtitle:
         "A consultancy-led suite designed for owners, investors, developers, and corporate occupiers.",
       core: "Core practice",
       items: [
         {
           title: "Property Consultant",
-          description:
+          description: [
             "Independent advisory for acquisitions, disposals, and portfolio strategy across Oman’s residential and commercial markets.",
+          ],
         },
         {
           title: "Real Estate Brokerage",
-          description:
-            "Discreet, high-touch brokerage connecting qualified buyers, sellers, and occupiers with the right opportunities.",
+          description: [
+            "Connecting buyers and sellers with the right property opportunities.",
+            "Professional support in buying, selling, and leasing properties across Oman.",
+            "Your trusted partner for smooth and successful property transactions.",
+          ],
         },
         {
           title: "Property Management",
-          description:
-            "Operational oversight that protects yield, tenant experience, and the long-term condition of your assets.",
+          description: [
+            "Professional management of residential and commercial properties.",
+            "We handle tenant relations, rent collection, maintenance, and daily operations.",
+            "Protecting your property value while maximising returns on your investment.",
+          ],
         },
         {
           title: "Property Valuation",
-          description:
-            "Defensible valuations for investment, financing, and corporate reporting—grounded in local market intelligence.",
+          description: [
+            "One of Oman’s leading property valuation companies.",
+            "Approved by leading banks and financial institutions.",
+            "Trusted expertise and reliable property valuations.",
+          ],
         },
         {
           title: "Quantity Surveying",
-          description:
-            "Cost planning, procurement support, and commercial control for development and fit-out programmes.",
+          description: [
+            "Professional quantity surveying services for residential and commercial buildings.",
+            "Expert cost estimation, budgeting, and material measurement.",
+            "Helping clients manage construction costs efficiently and accurately.",
+          ],
         },
       ],
     },
@@ -171,7 +194,7 @@ const dictionaries = {
       generalManager: "المدير العام",
       leaders: [
         {
-          src: "/MD.png",
+          src: "/MD.jpg",
           name: "الفاضل محمد الحارثي",
           title: "العضو المنتدب",
           bio: "بصفتي العضو المنتدب لشركة جاردن سيتي بروبرتيز عمان، أقدم خبرة واسعة في الوساطة العقارية، وإدارة العقارات، وتقييم الأصول، ومسح الكميات. وبفضل الرؤية الاستراتيجية والفهم العميق لسوق العقارات العماني، أركز على تحديد الفرص الاستثمارية القيمة وتقديم حلول عقارية مخصصة. إن التزامي بالمهنية والنزاهة ورضا العملاء يدفعني لتقديم خدمات موثوقة ومبتكرة وفعالة تحقق قيمة طويلة الأجل لعملائنا وشركائنا.",
@@ -180,7 +203,7 @@ const dictionaries = {
           phoneHref: "tel:+96897300200",
         },
         {
-          src: "/GM.png",
+          src: "/GM.jpeg",
           name: "الفاضل آدم الحارثي",
           title: "المدير العام",
           bio: "في جاردن سيتي بروبرتيز عمان، نلتزم بتقديم خدمات استثنائية في الوساطة العقارية، وإدارة الأملاك، وتقييم الأصول، ومسح الكميات. بفضل فهمنا الدقيق لسوق العقارات العماني وخبرتنا الواسعة في المجال العقاري، نوفر حلولاً مصممة خصيصاً لتلبية الاحتياجات المتنوعة لعملائنا. هدفنا هو مساعدة المستثمرين على اتخاذ قرارات عقارية مدروسة، وتحديد فرص استثمارية قيمة، وتحقيق عوائد مستدامة طويلة الأجل من خلال المشورة المهنية والخدمة الموثوقة والالتزام بالتميز.",
@@ -192,7 +215,7 @@ const dictionaries = {
     },
     services: {
       eyebrow: "خدماتنا",
-      title: "قدرات عقارية متكاملة.",
+      title: "",
       subtitle:
         "مجموعة استشارية مصممة للملاك والمستثمرين والمطورين والشركات المستأجرة.",
       core: "الممارسة الأساسية",
