@@ -68,7 +68,7 @@ const dictionaries = {
         },
         {
           src: "/GM.jpeg",
-          name: "MR ADAM AL HARTHI",
+          name: "MR ADAM AL HARTHY",
           title: "General Manager",
           bio: "At Garden City Properties Oman, we are committed to delivering exceptional real estate brokerage, property management, asset valuation, and quantity surveying services. With our in-depth understanding of the Omani property market and broad experience in real estate, we provide tailored solutions to meet the diverse needs of our clients. Our goal is to help investors make informed property decisions, identify valuable investment opportunities, and achieve sustainable, long-term returns through professional advice, reliable service, and a commitment to excellence.",
           email: "gardencityin@gmail.com",
