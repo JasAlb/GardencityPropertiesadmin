@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AlertCircle, Building2, CalendarDays, RefreshCw, Square } from "lucide-react";
+import {
+  AlertCircle,
+  Building2,
+  CalendarDays,
+  RefreshCw,
+  Square,
+  X,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
 
@@ -13,10 +20,8 @@ interface Project {
   area: string;
   developer: string;
   image: string;
+  description?: string;
 }
-
-const WHATSAPP_PREFIX =
-  "https://wa.me/9689495068217?text=Hello,%20I%20would%20like%20more%20details%20about%20";
 
 function WhatsAppIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -36,8 +41,27 @@ export default function ProjectsShowcase() {
   const copy = dictionary.projects;
 
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+    if (selectedProject) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [selectedProject]);
 
   useEffect(() => {
     let ignore = false;
@@ -64,6 +88,7 @@ export default function ProjectsShowcase() {
             area: String(row.area || ""),
             developer: String(row.developer || ""),
             image: String(row.image || ""),
+            description: row.description ? String(row.description) : undefined,
           }));
           setProjects(mapped);
         }
@@ -106,6 +131,7 @@ export default function ProjectsShowcase() {
           area: String(row.area || ""),
           developer: String(row.developer || ""),
           image: String(row.image || ""),
+          description: row.description ? String(row.description) : undefined,
         }));
         setProjects(mapped);
       }
@@ -209,7 +235,9 @@ export default function ProjectsShowcase() {
         {!isLoading && !error && projects.length > 0 && (
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => {
-              const whatsappUrl = `${WHATSAPP_PREFIX}${encodeURIComponent(project.name)}`;
+              const whatsappUrl = `https://wa.me/9689495068217?text=${encodeURIComponent(
+                `Hello Garden City, I would like more details about the ${project.name} property.`
+              )}`;
 
               return (
                 <article
@@ -273,14 +301,13 @@ export default function ProjectsShowcase() {
 
                     {/* Action Buttons: Primary + WhatsApp */}
                     <div className="mt-5 flex items-center gap-2.5 pt-2">
-                      <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProject(project)}
                         className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-white px-4 text-xs font-semibold text-slate-950 shadow-sm transition hover:bg-slate-200 active:scale-[0.99]"
                       >
                         {copy.getDetails}
-                      </a>
+                      </button>
                       <a
                         href={whatsappUrl}
                         target="_blank"
@@ -297,6 +324,120 @@ export default function ProjectsShowcase() {
             })}
           </div>
         )}
+
+      {/* Quick View Modal */}
+      {selectedProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-700/50 rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setSelectedProject(null)}
+              aria-label="Close modal"
+              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-slate-800/80 text-slate-400 transition hover:bg-slate-700 hover:text-white focus:outline-none"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            {/* Left/Top: Property Image */}
+            <div className="relative h-64 w-full shrink-0 bg-slate-950 md:h-auto md:w-1/2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedProject.image}
+                alt={`${selectedProject.name} - Luxury Property in Oman developed by ${selectedProject.developer}`}
+                className="h-full w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent md:hidden" />
+            </div>
+
+            {/* Right/Bottom: Property Details */}
+            <div className="flex flex-1 flex-col justify-between overflow-y-auto p-6 sm:p-8">
+              <div>
+                <span className="inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold tracking-wider text-amber-400 uppercase">
+                  {language === "ar" ? "تفاصيل المشروع" : "Property Overview"}
+                </span>
+
+                <h3 className="mt-3 font-[family-name:var(--font-outfit)] text-2xl font-bold text-amber-500 sm:text-3xl">
+                  {selectedProject.name}
+                </h3>
+
+                <p className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  {selectedProject.price}
+                </p>
+
+                {/* Property Specs */}
+                <ul className="mt-6 space-y-3 rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-xs text-slate-400">
+                  <li className="flex items-center gap-2.5">
+                    <CalendarDays size={16} className="shrink-0 text-sky-400" />
+                    <span>
+                      <span className="text-slate-500">{copy.paymentPlan}: </span>
+                      <span className="font-semibold text-slate-200">
+                        {selectedProject.paymentPlan}
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <Square size={16} className="shrink-0 text-sky-400" />
+                    <span>
+                      <span className="text-slate-500">{copy.startingArea}: </span>
+                      <span className="font-semibold text-slate-200">
+                        {selectedProject.area}
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <Building2 size={16} className="shrink-0 text-sky-400" />
+                    <span>
+                      <span className="text-slate-500">{copy.developer}: </span>
+                      <span className="font-semibold text-slate-200">
+                        {selectedProject.developer}
+                      </span>
+                    </span>
+                  </li>
+                </ul>
+
+                {/* Expanded Description */}
+                <div className="mt-6">
+                  <h4 className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                    {language === "ar" ? "نبذة عن العقار" : "About This Property"}
+                  </h4>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                    {selectedProject.description ||
+                      (language === "ar"
+                        ? `مشروع ${selectedProject.name} من تطوير شركة ${selectedProject.developer}. يقدم فرصة استثمارية وسكنية متميزة في سلطنة عمان بمواصفات عالية وخطط سداد مرنة.`
+                        : `Experience premium living and investment potential with ${selectedProject.name}, developed by ${selectedProject.developer}. Strategically situated in Oman, offering superior architectural craftsmanship, modern amenities, and attractive payment arrangements.`)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bright "Register Interest via WhatsApp" CTA button */}
+              <div className="mt-8 pt-4 border-t border-slate-800">
+                <a
+                  href={`https://wa.me/9689495068217?text=${encodeURIComponent(
+                    `Hello Garden City, I would like more details about the ${selectedProject.name} property.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400 active:scale-[0.99]"
+                >
+                  <WhatsAppIcon className="h-5 w-5 fill-slate-950" />
+                  <span>
+                    {language === "ar"
+                      ? "تسجيل الاهتمام عبر واتساب"
+                      : "Register Interest via WhatsApp"}
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </section>
   );
