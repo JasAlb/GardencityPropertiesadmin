@@ -18,14 +18,14 @@ const CONSULTANTS: Consultant[] = [
     role: "Property consultant",
     phone: "+968 99190404",
     email: "rahul@gmail.com",
-    image: "/consult1.png",
+    image: "/Consult1.jpeg",
   },
   {
     name: "[Consultant Name]",
     role: "Property consultant",
     phone: "[Consultant Mob]",
     email: "[Consultant Email]",
-    image: "/Consult2.jpeg",
+    image: "/Consult2.png",
   },
 ];
 
@@ -34,7 +34,7 @@ export default function Consultants() {
 
   return (
     <section id="consultants" className="scroll-mt-24 border-t border-white/5 py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Section Header */}
         <div className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.28em] text-sky-400 uppercase">
@@ -77,7 +77,7 @@ export default function Consultants() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={consultant.image}
-                    alt={consultant.name}
+                    alt={`${consultant.name} - ${consultant.role} at Garden City Properties Oman`}
                     className="h-full w-full rounded-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>

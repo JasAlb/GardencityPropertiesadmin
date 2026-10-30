@@ -120,7 +120,7 @@ export default function ProjectsShowcase() {
 
   return (
     <section id="projects" className="scroll-mt-24 border-t border-white/5 py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Header */}
         <div className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.28em] text-sky-400 uppercase">
@@ -221,7 +221,7 @@ export default function ProjectsShowcase() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={project.image}
-                      alt={project.name}
+                      alt={`${project.name} - Luxury Property in Oman developed by ${project.developer}`}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />

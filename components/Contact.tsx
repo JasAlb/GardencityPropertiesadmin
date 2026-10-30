@@ -29,12 +29,12 @@ export default function Contact() {
 
   return (
     <section id="contact" className="scroll-mt-24 border-t border-white/5 py-24">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[1.15fr_0.85fr]">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 md:px-8 lg:grid-cols-[1.15fr_0.85fr]">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-3xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl sm:p-10"
+          className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-8 md:p-10"
         >
           <p className="text-xs font-semibold tracking-[0.28em] text-sky-400 uppercase">
             {copy.eyebrow}
@@ -122,7 +122,7 @@ export default function Contact() {
               +968 9495068217
             </a>
             <a
-              href="https://maps.app.goo.gl/hfGpoHSPzP3bEzrE6"
+              href="https://maps.app.goo.gl/tZ5U4GjpML5jncRw5"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm text-sky-200 transition hover:border-sky-400/40"

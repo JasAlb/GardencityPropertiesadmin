@@ -11,58 +11,58 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Garden City Properties | Real Estate Consultancy Oman",
+  title: "Garden City Properties | Trusted Real Estate & Property Consultants in Oman",
   description:
-    "Trusted real estate consultancy in Oman specializing in brokerage, property management, asset valuation, and quantity surveying for investors and developers.",
-  icons: {
-    icon: [
-      { url: "/logo-main.jpeg", type: "image/jpeg" },
-    ],
-    shortcut: "/logo-main.jpeg",
-    apple: "/logo-main.jpeg",
-  },
+    "Oman's leading real estate consultancy offering expert property valuation, brokerage, management, and quantity surveying. Maximize your asset value with Garden City Properties.",
   keywords: [
-    "Real estate Oman",
-    "property consultancy Muscat",
+    "real estate Oman",
     "property valuation Oman",
+    "property management Muscat",
     "real estate brokerage",
-    "property management Sultanate of Oman",
-    "quantity surveying",
+    "Garden City Properties",
+    "investment opportunities Oman",
   ],
   authors: [{ name: "Garden City Properties" }],
   creator: "Garden City Properties",
   publisher: "Garden City Properties",
-  metadataBase: new URL("https://gardencityproperties.om"),
+  metadataBase: new URL("https://www.gardencityproperties.net"),
   alternates: {
-    canonical: "/",
+    canonical: "/en",
     languages: {
-      "en": "/?lang=en",
-      "ar": "/?lang=ar",
+      "en-OM": "/en",
+      "ar-OM": "/ar",
+      "x-default": "/en",
     },
   },
   openGraph: {
-    title: "Garden City Properties | Real Estate Consultancy Oman",
+    title: "Garden City Properties | Trusted Real Estate & Property Consultants in Oman",
     description:
-      "Trusted real estate consultancy in Oman specializing in brokerage, property management, asset valuation, and quantity surveying for investors and developers.",
+      "Oman's leading real estate consultancy offering expert property valuation, brokerage, management, and quantity surveying. Maximize your asset value with Garden City Properties.",
+    url: "https://www.gardencityproperties.net",
     type: "website",
     locale: "en_OM",
     alternateLocale: ["ar_OM"],
     siteName: "Garden City Properties",
     images: [
       {
-        url: "/logo-main.jpeg",
-        width: 1200,
-        height: 630,
-        alt: "Garden City Properties | Real Estate Consultancy Oman",
+        url: "/Logo.jpeg",
+        width: 1280,
+        height: 532,
+        alt: "Garden City Properties | Trusted Real Estate & Property Consultants in Oman",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Garden City Properties | Real Estate Consultancy Oman",
+    title: "Garden City Properties | Trusted Real Estate & Property Consultants in Oman",
     description:
-      "Trusted real estate consultancy in Oman specializing in brokerage, property management, asset valuation, and quantity surveying for investors and developers.",
-    images: ["/logo-main.jpeg"],
+      "Oman's leading real estate consultancy offering expert property valuation, brokerage, management, and quantity surveying. Maximize your asset value with Garden City Properties.",
+    images: ["/Logo.jpeg"],
+  },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
   robots: {
     index: true,
@@ -86,9 +86,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className="dark h-full antialiased"
     >
       <head>
-        <link rel="icon" href="/logo-main.jpeg" type="image/jpeg" />
-        <link rel="shortcut icon" href="/logo-main.jpeg" type="image/jpeg" />
-        <link rel="apple-touch-icon" href="/logo-main.jpeg" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="shortcut icon" href="/icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -98,6 +98,95 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link
           href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": ["RealEstateAgent", "LocalBusiness"],
+              "name": "Garden City Properties",
+              "url": "https://www.gardencityproperties.net",
+              "image": "https://www.gardencityproperties.net/Logo.jpeg",
+              "logo": "https://www.gardencityproperties.net/Logo.jpeg",
+              "description": "Leading real estate consultancy and brokerage in Oman.",
+              "telephone": "+9689495068217",
+              "email": "gardencityin@gmail.com",
+              "priceRange": "$$",
+              "currenciesAccepted": "OMR",
+              "hasMap": "https://maps.app.goo.gl/tZ5U4GjpML5jncRw5",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 23.6143,
+                "longitude": 58.2567,
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": [
+                    "Sunday",
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                  ],
+                  "opens": "08:00",
+                  "closes": "17:00",
+                },
+              ],
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Office No 11, Mawelah North",
+                "addressLocality": "Muscat",
+                "addressCountry": "Oman",
+                "postalCode": "117",
+                "postOfficeBoxNumber": "275",
+              },
+              "founder": {
+                "@type": "Person",
+                "name": "Mohamed Al Harthy",
+              },
+              "areaServed": {
+                "@type": "Country",
+                "name": "Oman",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What real estate services does Garden City Properties provide in Oman?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Garden City Properties offers expert real estate brokerage, property management, property valuation, and quantity surveying across Oman.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "Where is Garden City Properties located?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our corporate office is located at Office No 11, Mawelah North, Muscat, Sultanate of Oman.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "Does Garden City Properties provide certified property valuations?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, we are one of Oman's leading property valuation companies, approved by leading banks and financial institutions.",
+                  },
+                },
+              ],
+            }),
+          }}
         />
         <script
           dangerouslySetInnerHTML={{
@@ -111,7 +200,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
       </head>
-      <body className="min-h-full bg-background font-sans text-foreground">
+      <body className="min-h-full bg-background font-sans text-foreground m-0 p-0">
         <LanguageShell>{children}</LanguageShell>
       </body>
     </html>

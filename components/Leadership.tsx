@@ -10,7 +10,7 @@ export default function Leadership() {
 
   return (
     <section id="leadership" className="scroll-mt-24 border-t border-white/5 py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.28em] text-sky-400 uppercase">
             {copy.leadershipEyebrow}
@@ -35,7 +35,7 @@ export default function Leadership() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={leader.src}
-                  alt={`${leader.name} - ${leader.title}`}
+                  alt={`${leader.name} - ${leader.title} of Garden City Properties Oman`}
                   className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent opacity-75" />

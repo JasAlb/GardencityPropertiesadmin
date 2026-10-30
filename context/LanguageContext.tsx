@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export type Language = "en" | "ar";
 
@@ -297,26 +298,25 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-function getInitialLanguage(): Language {
-  return "en";
-}
+export function LanguageProvider({
+  children,
+  initialLanguage,
+}: {
+  children: ReactNode;
+  initialLanguage?: Language;
+}) {
+  const router = useRouter();
+  const pathname = usePathname() || "";
+  const [manualLang, setManualLang] = useState<Language | null>(null);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
-
-  // Sync saved preference from localStorage on mount to prevent hydration mismatch
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem("gcp-language");
-      if (stored === "ar" || stored === "en") {
-        queueMicrotask(() => {
-          setLanguageState(stored);
-        });
-      }
-    } catch {
-      // Ignore
-    }
-  }, []);
+  // Derive language dynamically from URL pathname with fallback to manual/initial state
+  const language: Language = useMemo(() => {
+    if (pathname.startsWith("/ar")) return "ar";
+    if (pathname.startsWith("/en")) return "en";
+    if (manualLang) return manualLang;
+    if (initialLanguage) return initialLanguage;
+    return "en";
+  }, [pathname, manualLang, initialLanguage]);
 
   useEffect(() => {
     try {
@@ -330,12 +330,27 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language]);
 
   const setLanguage = useCallback((next: Language) => {
-    setLanguageState(next);
+    setManualLang(next);
   }, []);
 
   const toggleLanguage = useCallback(() => {
-    setLanguageState((current) => (current === "en" ? "ar" : "en"));
-  }, []);
+    const next = language === "en" ? "ar" : "en";
+    setManualLang(next);
+    try {
+      window.localStorage.setItem("gcp-language", next);
+    } catch {
+      // Ignore
+    }
+    let newPath = pathname;
+    if (pathname.startsWith("/ar")) {
+      newPath = pathname.replace(/^\/ar/, "/en") || "/en";
+    } else if (pathname.startsWith("/en")) {
+      newPath = pathname.replace(/^\/en/, "/ar") || "/ar";
+    } else {
+      newPath = `/${next}`;
+    }
+    router.push(newPath);
+  }, [language, pathname, router]);
 
   const value = useMemo<LanguageContextValue>(
     () => ({

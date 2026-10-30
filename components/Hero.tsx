@@ -9,13 +9,13 @@ export default function Hero() {
   const copy = dictionary.hero;
 
   return (
-    <section id="home" className="relative isolate min-h-[92vh] overflow-hidden">
+    <section id="home" className="relative isolate min-h-[92vh] overflow-hidden m-0 -mt-[1px]">
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0 bg-[#050816]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/bg1stpage.jpeg"
-          alt="Garden City Properties Oman skyline"
+          alt="Garden City Properties - Premium Real Estate Consultancy and Property Brokerage in Oman"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
       </div>
@@ -25,7 +25,7 @@ export default function Hero() {
       <div className="absolute inset-x-0 bottom-0 z-0 h-28 bg-gradient-to-t from-[#050816] to-transparent" />
 
       {/* Foreground Content */}
-      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-5 py-28 sm:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 py-24 sm:py-28 md:px-8">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

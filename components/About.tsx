@@ -9,7 +9,7 @@ export default function About() {
 
   return (
     <section id="about" className="scroll-mt-24 border-t border-white/5 py-24">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 md:px-8 lg:grid-cols-2 lg:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -23,16 +23,16 @@ export default function About() {
             {copy.title}
           </h2>
           <p className="mt-6 font-sans text-base leading-8 text-slate-300">{copy.body}</p>
-          <div className="mt-10 grid grid-cols-3 gap-4">
+          <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4">
             {copy.stats.map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-white/10 bg-white/5 px-3 py-4 backdrop-blur-md"
+                className="rounded-2xl border border-white/10 bg-white/5 px-2.5 py-3.5 sm:px-3 sm:py-4 text-center sm:text-start backdrop-blur-md"
               >
-                <p className="font-[family-name:var(--font-outfit)] text-lg font-semibold text-sky-300">
+                <p className="font-[family-name:var(--font-outfit)] text-base sm:text-lg font-semibold text-sky-300">
                   {stat.value}
                 </p>
-                <p className="mt-1 text-xs text-slate-400">{stat.label}</p>
+                <p className="mt-1 text-[0.7rem] sm:text-xs text-slate-400">{stat.label}</p>
               </div>
             ))}
           </div>

@@ -10,7 +10,7 @@ function DirectedShell({ children }: { children: ReactNode }) {
     <div
       dir={dir}
       lang={language}
-      className={`flex min-h-full flex-col bg-[#050816] ${
+      className={`flex min-h-full flex-col gap-0 m-0 p-0 bg-[#050816] ${
         language === "ar" ? "font-[family-name:var(--font-cairo)]" : ""
       }`}
     >
@@ -19,9 +19,15 @@ function DirectedShell({ children }: { children: ReactNode }) {
   );
 }
 
-export default function LanguageShell({ children }: { children: ReactNode }) {
+export default function LanguageShell({
+  children,
+  locale,
+}: {
+  children: ReactNode;
+  locale?: "en" | "ar";
+}) {
   return (
-    <LanguageProvider>
+    <LanguageProvider initialLanguage={locale}>
       <DirectedShell>{children}</DirectedShell>
     </LanguageProvider>
   );
