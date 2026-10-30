@@ -3,12 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { language, toggleLanguage, dictionary } = useLanguage();
   const nav = dictionary.nav;
 
@@ -62,44 +61,38 @@ export default function Navbar() {
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
-            onClick={() => setOpen((value) => !value)}
-            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </nav>
 
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-white/10 bg-slate-950/95 backdrop-blur-2xl md:hidden"
-          >
-            <div className="flex flex-col gap-1 px-4 py-4 sm:px-6">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-white/5 hover:text-sky-300"
-                >
-                  {link.label}
-                </a>
-              ))}
+      {/* Separate Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className="absolute top-full left-0 w-full bg-slate-950/95 backdrop-blur-xl flex flex-col p-6 z-40 border-b border-white/10 shadow-2xl md:hidden">
+          <div className="flex flex-col gap-1">
+            {links.map((link) => (
               <a
-                href="#contact"
-                onClick={() => setOpen(false)}
-                className="mt-3 rounded-full bg-gradient-to-r from-sky-400 to-cyan-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-white/5 hover:text-sky-300"
               >
-                {nav.getStarted}
+                {link.label}
               </a>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            ))}
+            <a
+              href="#contact"
+              onClick={() => setIsOpen(false)}
+              className="mt-3 rounded-full bg-gradient-to-r from-sky-400 to-cyan-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+            >
+              {nav.getStarted}
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

@@ -54,13 +54,9 @@ const dictionaries = {
           title: "Managing Director",
           bio: (
             <>
-              The Founder and Managing Director of GARDENCITY PROPERTIES Oman, I bring approximately 18 years of extensive professional experience in real estate brokerage, property management, asset valuation, and quantity surveying.
-              <br />
-              <br />
-              Drawing on nearly two decades of industry expertise and an in-depth understanding of the Omani real estate market, I founded Garden City Properties with a vision to deliver comprehensive, innovative, and reliable real estate solutions. My focus is on identifying strategic investment opportunities, maximising property value, and providing tailored services that meet the needs of individuals, investors, businesses, and financial institutions.
-              <br />
-              <br />
-              Driven by professionalism, integrity, and a commitment to excellence, I strive to build lasting client relationships and establish Garden City Properties as a trusted name in Oman&apos;s real estate sector, creating sustainable long-term value for our clients and partners.
+              <p>The Founder and Managing Director of GARDENCITY PROPERTIES Oman, I bring approximately 18 years of extensive professional experience in real estate brokerage, property management, asset valuation, and quantity surveying.</p>
+              <p>Drawing on nearly two decades of industry expertise and an in-depth understanding of the Omani real estate market, I founded Garden City Properties with a vision to deliver comprehensive, innovative, and reliable real estate solutions. My focus is on identifying strategic investment opportunities, maximising property value, and providing tailored services that meet the needs of individuals, investors, businesses, and financial institutions.</p>
+              <p>Driven by professionalism, integrity, and a commitment to excellence, I strive to build lasting client relationships and establish Garden City Properties as a trusted name in Oman&apos;s real estate sector, creating sustainable long-term value for our clients and partners.</p>
             </>
           ),
           email: "gardencityin@gmail.com",
@@ -71,7 +67,13 @@ const dictionaries = {
           src: "/GM.jpeg",
           name: "MR ADAM AL HARTHY",
           title: "General Manager",
-          bio: "At Garden City Properties Oman, we are committed to delivering exceptional real estate brokerage, property management, asset valuation, and quantity surveying services. With our in-depth understanding of the Omani property market and broad experience in real estate, we provide tailored solutions to meet the diverse needs of our clients. Our goal is to help investors make informed property decisions, identify valuable investment opportunities, and achieve sustainable, long-term returns through professional advice, reliable service, and a commitment to excellence.",
+          bio: (
+            <>
+              <p>As the General Manager of GARDENCITY PROPERTIES Oman, I oversee the daily operations and strategic execution across our core divisions, ensuring seamless delivery in property management, brokerage, and asset valuation.</p>
+              <p>With a strong foundation in the Omani property market, my focus is on translating our corporate vision into measurable success for our clients. I lead our dedicated team in implementing innovative solutions and operational best practices, ensuring that every transaction is handled with precision, transparency, and a deep commitment to maximizing returns for our diverse portfolio of investors.</p>
+              <p>Dedicated to fostering robust client relationships and upholding our standard of excellence, I work closely with our partners to navigate the evolving real estate landscape. My goal is to consistently exceed expectations and deliver sustainable growth across our entire portfolio.</p>
+            </>
+          ),
           email: "gardencityin@gmail.com",
           phone: "+968 77304446",
           phoneHref: "tel:+96877304446",
@@ -198,7 +200,13 @@ const dictionaries = {
           src: "/MD.jpg",
           name: "الفاضل محمد الحارثي",
           title: "العضو المنتدب",
-          bio: "بصفتي العضو المنتدب لشركة جاردن سيتي بروبرتيز عمان، أقدم خبرة واسعة في الوساطة العقارية، وإدارة العقارات، وتقييم الأصول، ومسح الكميات. وبفضل الرؤية الاستراتيجية والفهم العميق لسوق العقارات العماني، أركز على تحديد الفرص الاستثمارية القيمة وتقديم حلول عقارية مخصصة. إن التزامي بالمهنية والنزاهة ورضا العملاء يدفعني لتقديم خدمات موثوقة ومبتكرة وفعالة تحقق قيمة طويلة الأجل لعملائنا وشركائنا.",
+          bio: (
+            <>
+              <p>بصفتي العضو المنتدب ومؤسس شركة جاردن سيتي بروبرتيز عمان، أقدم خبرة واسعة في الوساطة العقارية، وإدارة العقارات، وتقييم الأصول، ومسح الكميات تمتد لنحو 18 عاماً.</p>
+              <p>وبفضل الرؤية الاستراتيجية والفهم العميق لسوق العقارات العماني، أسست الشركة بهدف تقديم حلول عقارية شاملة ومبتكرة وموثوقة، مع التركيز على اقتناص الفرص الاستثمارية الواعدة وتعظيم قيمة الأصول وتقديم خدمات مخصصة تلبي متطلبات الأفراد والمستثمرين والشركات والمؤسسات المالية.</p>
+              <p>إن التزامي الراسخ بالمهنية والنزاهة والتميز يدفعني لبناء شراكات وثيقة ومستدامة، وترسيخ اسم جاردن سيتي بروبرتيز كشريك عقاري موثوق في سلطنة عمان يحقق قيمة حقيقية وطويلة الأجل.</p>
+            </>
+          ),
           email: "gardencityin@gmail.com",
           phone: "+968 97300200",
           phoneHref: "tel:+96897300200",
@@ -207,7 +215,13 @@ const dictionaries = {
           src: "/GM.jpeg",
           name: "الفاضل آدم الحارثي",
           title: "المدير العام",
-          bio: "في جاردن سيتي بروبرتيز عمان، نلتزم بتقديم خدمات استثنائية في الوساطة العقارية، وإدارة الأملاك، وتقييم الأصول، ومسح الكميات. بفضل فهمنا الدقيق لسوق العقارات العماني وخبرتنا الواسعة في المجال العقاري، نوفر حلولاً مصممة خصيصاً لتلبية الاحتياجات المتنوعة لعملائنا. هدفنا هو مساعدة المستثمرين على اتخاذ قرارات عقارية مدروسة، وتحديد فرص استثمارية قيمة، وتحقيق عوائد مستدامة طويلة الأجل من خلال المشورة المهنية والخدمة الموثوقة والالتزام بالتميز.",
+          bio: (
+            <>
+              <p>بصفتي المدير العام لشركة جاردن سيتي بروبرتيز عمان، أتولى الإشراف على العمليات اليومية والتنفيذ الاستراتيجي عبر قطاعاتنا الحيوية، لضمان أعلى درجات الكفاءة في إدارة العقارات والوساطة وتقييم الأصول.</p>
+              <p>انطلاقاً من دراية عميقة بسوق العقارات العماني، أركز على ترجمة رؤيتنا المؤسسية إلى نجاحات ملموسة لعملائنا، حيث أقود فريقنا المتخصص لتطبيق حلول مبتكرة وأفضل الممارسات التشغيلية، مع إدارة كل معاملة بدقة وشفافية لتعظيم العوائد لمستثمرينا.</p>
+              <p>ملتزمون بترسيخ علاقات وطيدة مع العملاء ومواصلة التميز، وأعمل بالتعاون مع شركائنا لمواكبة تطورات المشهد العقاري، بهدف تجاوز التوقعات وتحقيق نمو مستدام ومستمر لمحفظتنا الاستثمارية.</p>
+            </>
+          ),
           email: "gardencityin@gmail.com",
           phone: "+968 77304446",
           phoneHref: "tel:+96877304446",

@@ -20,7 +20,7 @@ export default function Leadership() {
           </h2>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+        <div className="mt-12 grid gap-8 lg:grid-cols-2 items-stretch">
           {copy.leaders.map((leader, index) => (
             <motion.article
               key={leader.src}
@@ -28,10 +28,10 @@ export default function Leadership() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl transition-all duration-300 hover:border-sky-400/50 hover:shadow-[0_0_36px_rgba(56,189,248,0.18)]"
+              className="group flex flex-col h-full overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl transition-all duration-300 hover:border-sky-400/50 hover:shadow-[0_0_36px_rgba(56,189,248,0.18)]"
             >
               {/* Leader Portrait */}
-              <div className="relative h-80 w-full overflow-hidden bg-slate-900 sm:h-96">
+              <div className="relative h-80 w-full shrink-0 overflow-hidden bg-slate-900 sm:h-96">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={leader.src}
@@ -59,9 +59,9 @@ export default function Leadership() {
                 </p>
 
                 {/* Extended Biography */}
-                <p className="mt-5 flex-1 font-sans text-sm font-normal leading-relaxed text-slate-200/90 antialiased tracking-normal text-justify sm:text-[15px] sm:leading-7">
+                <div className="mt-5 flex-1 flex-grow space-y-4 font-sans text-sm font-normal leading-relaxed text-slate-200/90 antialiased tracking-normal text-justify sm:text-[15px] sm:leading-7">
                   {leader.bio}
-                </p>
+                </div>
 
                 {/* Contact Links */}
                 <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-6">

@@ -41,7 +41,6 @@ export default function Services() {
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {copy.items.map((service, index) => {
             const Icon = icons[index];
-            const featured = index === 0;
             const isList = Array.isArray(service.description);
 
             return (
@@ -51,18 +50,8 @@ export default function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, delay: index * 0.06 }}
-                className={`group flex h-full flex-col rounded-2xl border bg-white/5 p-7 backdrop-blur-xl transition-all duration-300 ease-in-out hover:-translate-y-1 ${
-                  featured
-                    ? "border-sky-400/70 shadow-[0_0_36px_rgba(56,189,248,0.18)] hover:border-sky-400 hover:shadow-[0_0_40px_rgba(56,189,248,0.28)]"
-                    : "border-white/10 hover:border-sky-400/50 hover:shadow-[0_0_28px_rgba(56,189,248,0.16)]"
-                }`}
+                className="group flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-sky-400/50 hover:shadow-[0_0_32px_rgba(56,189,248,0.2)]"
               >
-                {featured ? (
-                  <p className="mb-4 text-[11px] font-semibold tracking-[0.22em] text-sky-300 uppercase">
-                    {copy.core}
-                  </p>
-                ) : null}
-
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-slate-950/60 text-sky-300 transition-colors group-hover:border-sky-400/40 group-hover:text-cyan-200">
                   <Icon size={22} />
                 </div>
