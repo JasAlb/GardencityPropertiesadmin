@@ -14,6 +14,7 @@ import {
   LogOut,
   Plus,
   RefreshCw,
+  Ruler,
   Square,
   Trash2,
   Upload,
@@ -28,6 +29,14 @@ interface ProjectRecord {
   area: string;
   developer: string;
   image: string;
+  gallery_urls?: string[];
+  floor_plan_url?: string;
+  location?: string;
+  completion_date?: string;
+  construction_stage?: string;
+  status?: string;
+  type?: string;
+  structure?: string;
   created_at?: string;
 }
 
@@ -49,8 +58,20 @@ export default function AdminDashboardPage() {
   const [paymentPlan, setPaymentPlan] = useState("");
   const [area, setArea] = useState("");
   const [developer, setDeveloper] = useState("");
+  const [location, setLocation] = useState("");
+  const [completionDate, setCompletionDate] = useState("");
+  const [constructionStage, setConstructionStage] = useState("");
+  const [status, setStatus] = useState("");
+  const [type, setType] = useState("");
+  const [structure, setStructure] = useState("");
+
+  // Media files state
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
+  const [floorPlanPreview, setFloorPlanPreview] = useState<string | null>(null);
 
   // Feedback banners
   const [submitting, setSubmitting] = useState(false);
@@ -81,9 +102,27 @@ export default function AdminDashboardPage() {
           name: String(item.name || ""),
           price: String(item.price || ""),
           paymentPlan: String(item.payment_plan || item.paymentPlan || ""),
-          area: String(item.area || ""),
+          area: String(item.area || item.site_area || ""),
           developer: String(item.developer || ""),
           image: String(item.image || ""),
+          gallery_urls: Array.isArray(item.gallery_urls)
+            ? (item.gallery_urls as string[])
+            : Array.isArray(item.galleryUrls)
+            ? (item.galleryUrls as string[])
+            : [],
+          floor_plan_url:
+            (typeof item.floor_plan_url === "string" && item.floor_plan_url.trim()) ||
+            (typeof item.floorplan_url === "string" && item.floorplan_url.trim()) ||
+            (typeof item.floorPlanUrl === "string" && item.floorPlanUrl.trim()) ||
+            (typeof item.floor_plan === "string" && item.floor_plan.trim()) ||
+            (typeof item.floorplan === "string" && item.floorplan.trim()) ||
+            undefined,
+          location: typeof item.location === "string" ? item.location : undefined,
+          completion_date: typeof item.completion_date === "string" ? item.completion_date : undefined,
+          construction_stage: typeof item.construction_stage === "string" ? item.construction_stage : undefined,
+          status: typeof item.status === "string" ? item.status : undefined,
+          type: typeof item.type === "string" ? item.type : typeof item.property_type === "string" ? item.property_type : undefined,
+          structure: typeof item.structure === "string" ? item.structure : undefined,
           created_at: typeof item.created_at === "string" ? item.created_at : undefined,
         }));
         setProjects(mapped);
@@ -146,6 +185,52 @@ export default function AdminDashboardPage() {
     }
   }
 
+  // Handle gallery images selection & previews
+  function handleGalleryChange(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    if (files.length > 0) {
+      setGalleryFiles(files);
+      // Revoke previous URLs to avoid memory leaks
+      galleryPreviews.forEach((url) => URL.revokeObjectURL(url));
+      const previews = files.map((file) => URL.createObjectURL(file));
+      setGalleryPreviews(previews);
+    }
+  }
+
+  function handleRemoveGallery() {
+    galleryPreviews.forEach((url) => URL.revokeObjectURL(url));
+    setGalleryPreviews([]);
+    setGalleryFiles([]);
+    const galleryInput = document.getElementById(
+      "project-gallery-input",
+    ) as HTMLInputElement | null;
+    if (galleryInput) galleryInput.value = "";
+  }
+
+  // Handle floor plan image selection & preview
+  function handleFloorPlanChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFloorPlanFile(file);
+      if (floorPlanPreview) {
+        URL.revokeObjectURL(floorPlanPreview);
+      }
+      setFloorPlanPreview(URL.createObjectURL(file));
+    }
+  }
+
+  function handleRemoveFloorPlan() {
+    if (floorPlanPreview) {
+      URL.revokeObjectURL(floorPlanPreview);
+    }
+    setFloorPlanPreview(null);
+    setFloorPlanFile(null);
+    const fpInput = document.getElementById(
+      "project-floor-plan-input",
+    ) as HTMLInputElement | null;
+    if (fpInput) fpInput.value = "";
+  }
+
   // Generate unique URL slug
   function generateSlug(title: string): string {
     const clean = title
@@ -164,7 +249,7 @@ export default function AdminDashboardPage() {
     setFormSuccess(null);
 
     if (!imageFile) {
-      setFormError("Please select an image file for the property.");
+      setFormError("Please select a primary main image for the property.");
       return;
     }
 
@@ -173,7 +258,7 @@ export default function AdminDashboardPage() {
     try {
       const slug = generateSlug(name);
 
-      // 1. Upload image to 'property-images' Supabase storage bucket
+      // 1. Upload main image to 'property-images' Supabase storage bucket
       const fileExt = imageFile.name.split(".").pop() || "jpg";
       const sanitizedExt = fileExt.toLowerCase().replace(/[^a-z0-9]/g, "");
       const storagePath = `properties/${slug}-${Date.now()}.${sanitizedExt}`;
@@ -186,17 +271,68 @@ export default function AdminDashboardPage() {
         });
 
       if (uploadError) {
-        throw new Error(`Storage upload failed: ${uploadError.message}`);
+        throw new Error(`Main image upload failed: ${uploadError.message}`);
       }
 
-      // 2. Retrieve public URL
+      // 2. Retrieve main image public URL
       const { data: publicUrlData } = supabase.storage
         .from("property-images")
         .getPublicUrl(storagePath);
 
       const publicImageUrl = publicUrlData.publicUrl;
 
-      // 3. Insert record into 'projects' table
+      // 3. Upload gallery images if provided
+      const galleryUrls: string[] = [];
+      for (let i = 0; i < galleryFiles.length; i++) {
+        const gFile = galleryFiles[i];
+        const gExt = (gFile.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const gPath = `properties/${slug}-gallery-${i + 1}-${Date.now()}.${gExt}`;
+
+        const { error: gUploadErr } = await supabase.storage
+          .from("property-images")
+          .upload(gPath, gFile, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+        if (gUploadErr) {
+          throw new Error(`Gallery image upload failed: ${gUploadErr.message}`);
+        }
+
+        const { data: gUrlData } = supabase.storage
+          .from("property-images")
+          .getPublicUrl(gPath);
+        if (gUrlData?.publicUrl) {
+          galleryUrls.push(gUrlData.publicUrl);
+        }
+      }
+
+      // 4. Upload floor plan image if provided
+      let floorPlanUrl: string | null = null;
+      if (floorPlanFile) {
+        const fpExt = (floorPlanFile.name.split(".").pop() || "jpg")
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
+        const fpPath = `properties/${slug}-floorplan-${Date.now()}.${fpExt}`;
+
+        const { error: fpUploadErr } = await supabase.storage
+          .from("property-images")
+          .upload(fpPath, floorPlanFile, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+        if (fpUploadErr) {
+          throw new Error(`Floor plan upload failed: ${fpUploadErr.message}`);
+        }
+
+        const { data: fpUrlData } = supabase.storage
+          .from("property-images")
+          .getPublicUrl(fpPath);
+        floorPlanUrl = fpUrlData?.publicUrl || null;
+      }
+
+      // 5. Insert record into 'projects' table
       const { error: insertError } = await supabase.from("projects").insert([
         {
           id: slug,
@@ -206,6 +342,14 @@ export default function AdminDashboardPage() {
           area: area.trim(),
           developer: developer.trim(),
           image: publicImageUrl,
+          gallery_urls: galleryUrls,
+          floor_plan_url: floorPlanUrl,
+          location: location.trim() || undefined,
+          completion_date: completionDate.trim() || undefined,
+          construction_stage: constructionStage.trim() || undefined,
+          status: status.trim() || undefined,
+          type: type.trim() || undefined,
+          structure: structure.trim() || undefined,
         },
       ]);
 
@@ -213,24 +357,34 @@ export default function AdminDashboardPage() {
         throw new Error(`Database insert failed: ${insertError.message}`);
       }
 
-      // 4. Success feedback and form reset
-      setFormSuccess(`Successfully published "${name}" to the projects database!`);
+      // 6. Success feedback and form reset
+      setFormSuccess(
+        `Successfully published "${name}" with all visuals to the database!`,
+      );
       setName("");
       setPrice("");
       setPaymentPlan("");
       setArea("");
       setDeveloper("");
+      setLocation("");
+      setCompletionDate("");
+      setConstructionStage("");
+      setStatus("");
+      setType("");
+      setStructure("");
       setImageFile(null);
       if (imagePreview) {
         URL.revokeObjectURL(imagePreview);
       }
       setImagePreview(null);
+      handleRemoveGallery();
+      handleRemoveFloorPlan();
 
       // Reset file input element
       const fileInput = document.getElementById("project-image-input") as HTMLInputElement | null;
       if (fileInput) fileInput.value = "";
 
-      // 5. Refresh properties list
+      // 7. Refresh properties list
       await fetchProjects();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to publish project.";
@@ -492,13 +646,13 @@ export default function AdminDashboardPage() {
                   />
                 </div>
 
-                {/* Image Upload Input */}
+                {/* Main Image Upload Input */}
                 <div>
                   <label
                     htmlFor="project-image-input"
                     className="block text-xs font-semibold tracking-wider text-slate-300 uppercase"
                   >
-                    Property Image (Upload to Bucket) *
+                    Primary Main Image (Card Cover) *
                   </label>
 
                   <div className="mt-1.5">
@@ -516,18 +670,18 @@ export default function AdminDashboardPage() {
                           />
                           <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
                             <span className="text-xs font-semibold text-white bg-slate-950/80 px-2.5 py-1 rounded-md">
-                              Click to change image
+                              Click to change cover image
                             </span>
                           </div>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center text-center">
-                          <Upload className="h-8 w-8 text-sky-400" />
+                          <Upload className="h-7 w-7 text-sky-400" />
                           <p className="mt-2 text-xs font-medium text-slate-300">
-                            Click to browse property photo
+                            Upload main property cover
                           </p>
                           <p className="mt-0.5 text-[0.7rem] text-slate-500">
-                            PNG, JPG, WEBP up to 10MB
+                            Single image (PNG, JPG, WEBP)
                           </p>
                         </div>
                       )}
@@ -539,6 +693,229 @@ export default function AdminDashboardPage() {
                         className="hidden"
                       />
                     </label>
+                  </div>
+                </div>
+
+                {/* Gallery Images Upload Input (Multiple) */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="project-gallery-input"
+                      className="block text-xs font-semibold tracking-wider text-slate-300 uppercase"
+                    >
+                      Gallery Slideshow Images (Optional)
+                    </label>
+                    {galleryPreviews.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveGallery}
+                        className="text-[0.7rem] font-semibold text-red-400 hover:text-red-300 transition"
+                      >
+                        Clear gallery ({galleryPreviews.length})
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="mt-1.5">
+                    <label
+                      htmlFor="project-gallery-input"
+                      className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/15 bg-slate-950/60 p-4 transition hover:border-amber-400/50 hover:bg-slate-950"
+                    >
+                      {galleryPreviews.length > 0 ? (
+                        <div className="w-full">
+                          <div className="grid grid-cols-4 gap-2">
+                            {galleryPreviews.map((preview, idx) => (
+                              <div
+                                key={idx}
+                                className="relative h-16 w-full overflow-hidden rounded-lg border border-white/10"
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={preview}
+                                  alt={`Gallery preview ${idx + 1}`}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <p className="mt-2 text-center text-xs font-medium text-amber-300">
+                            {galleryPreviews.length} gallery image(s) selected (Click to replace)
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center text-center">
+                          <ImageIcon className="h-7 w-7 text-amber-400" />
+                          <p className="mt-2 text-xs font-medium text-slate-300">
+                            Upload multiple gallery photos
+                          </p>
+                          <p className="mt-0.5 text-[0.7rem] text-slate-500">
+                            Select multiple files for modal slideshow
+                          </p>
+                        </div>
+                      )}
+                      <input
+                        id="project-gallery-input"
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleGalleryChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Floor Plan Image Upload Input */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="project-floor-plan-input"
+                      className="block text-xs font-semibold tracking-wider text-slate-300 uppercase"
+                    >
+                      Floor Plan Image (Optional - Bento Modal)
+                    </label>
+                    {floorPlanPreview && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveFloorPlan}
+                        className="text-[0.7rem] font-semibold text-red-400 hover:text-red-300 transition"
+                      >
+                        Remove floor plan
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="mt-1.5">
+                    <label
+                      htmlFor="project-floor-plan-input"
+                      className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/15 bg-slate-950/60 p-4 transition hover:border-emerald-400/50 hover:bg-slate-950"
+                    >
+                      {floorPlanPreview ? (
+                        <div className="relative h-28 w-full overflow-hidden rounded-xl border border-white/10">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={floorPlanPreview}
+                            alt="Floor plan preview"
+                            className="h-full w-full object-contain p-2 bg-slate-900"
+                          />
+                          <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
+                            <span className="text-xs font-semibold text-white bg-slate-950/80 px-2.5 py-1 rounded-md">
+                              Click to change floor plan
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center text-center">
+                          <Ruler className="h-7 w-7 text-emerald-400" />
+                          <p className="mt-2 text-xs font-medium text-slate-300">
+                            Upload Floor Plan architectural blueprint
+                          </p>
+                          <p className="mt-0.5 text-[0.7rem] text-slate-500">
+                            PNG, JPG, WEBP (Displayed in Quick View modal)
+                          </p>
+                        </div>
+                      )}
+                      <input
+                        id="project-floor-plan-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFloorPlanChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Additional Bento-Box Metadata */}
+                <div className="border-t border-white/10 pt-4">
+                  <p className="text-xs font-semibold tracking-wider text-sky-400 uppercase mb-3">
+                    Bento-Box Showcase Details (Optional)
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label htmlFor="prop-loc" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Location
+                      </label>
+                      <input
+                        id="prop-loc"
+                        type="text"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="e.g., Muscat, Oman"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="prop-completion" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Completion Date
+                      </label>
+                      <input
+                        id="prop-completion"
+                        type="text"
+                        value={completionDate}
+                        onChange={(e) => setCompletionDate(e.target.value)}
+                        placeholder="e.g., Q4 2026"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="prop-stage" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Construction Stage
+                      </label>
+                      <input
+                        id="prop-stage"
+                        type="text"
+                        value={constructionStage}
+                        onChange={(e) => setConstructionStage(e.target.value)}
+                        placeholder="e.g., 75% Completed"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="prop-status" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Status
+                      </label>
+                      <input
+                        id="prop-status"
+                        type="text"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        placeholder="e.g., Available / Off-plan"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="prop-type" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Type
+                      </label>
+                      <input
+                        id="prop-type"
+                        type="text"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        placeholder="e.g., Luxury Villa"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="prop-structure" className="block text-[11px] font-medium text-slate-400 uppercase">
+                        Structure
+                      </label>
+                      <input
+                        id="prop-structure"
+                        type="text"
+                        value={structure}
+                        onChange={(e) => setStructure(e.target.value)}
+                        placeholder="e.g., G + 2 Floors"
+                        className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-white placeholder-slate-500 transition focus:border-sky-400 focus:outline-none"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -679,6 +1056,20 @@ export default function AdminDashboardPage() {
                             <Square className="h-3 w-3 text-sky-400" />
                             <span>{project.area || "N/A"}</span>
                           </span>
+
+                          {project.gallery_urls && project.gallery_urls.length > 0 && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[0.7rem] text-amber-300">
+                              <ImageIcon className="h-3 w-3 text-amber-400" />
+                              <span>+{project.gallery_urls.length} gallery images</span>
+                            </span>
+                          )}
+
+                          {project.floor_plan_url && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[0.7rem] text-emerald-300">
+                              <Ruler className="h-3 w-3 text-emerald-400" />
+                              <span>Floor plan</span>
+                            </span>
+                          )}
 
                           <span className="text-[0.65rem] text-slate-500 truncate">
                             id: {project.id}

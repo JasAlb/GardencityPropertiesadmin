@@ -43,7 +43,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="group relative min-h-[380px] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl transition-all duration-300 hover:border-sky-400/50 hover:shadow-[0_0_36px_rgba(56,189,248,0.2)]"
+          className="group relative h-full min-h-[380px] lg:min-h-[440px] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl transition-all duration-300 hover:border-sky-400/50 hover:shadow-[0_0_36px_rgba(56,189,248,0.2)]"
         >
           {/* Background Looping Video */}
           <video
@@ -54,23 +54,6 @@ export default function About() {
             playsInline
             className="absolute inset-0 h-full w-full object-cover"
           />
-
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/20" />
-
-          {/* Ambient Lighting Accents */}
-          <div className="pointer-events-none absolute top-12 start-12 h-24 w-24 rounded-full bg-sky-400/20 blur-2xl" />
-          <div className="pointer-events-none absolute end-10 bottom-16 h-32 w-32 rounded-full bg-cyan-400/15 blur-3xl" />
-
-          {/* Text Content */}
-          <div className="relative z-10 flex h-full min-h-[380px] flex-col justify-end p-8 sm:p-10">
-            <p className="text-xs font-semibold tracking-[0.3em] text-sky-300 uppercase">
-              {copy.principleLabel}
-            </p>
-            <p className="mt-3 max-w-sm font-[family-name:var(--font-outfit)] text-2xl font-semibold leading-snug text-white sm:text-3xl">
-              {copy.principle}
-            </p>
-          </div>
         </motion.div>
       </div>
     </section>

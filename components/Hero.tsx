@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -12,16 +13,19 @@ export default function Hero() {
     <section id="home" className="relative isolate min-h-[92vh] overflow-hidden m-0 -mt-[1px]">
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0 bg-[#050816]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/bg1stpage.jpeg"
           alt="Garden City Properties - Premium Real Estate Consultancy and Property Brokerage in Oman"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          fill
+          priority={true}
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-center brightness-110 contrast-125"
         />
       </div>
 
-      {/* Lightened Overlay: reveals natural brightness & details while maintaining crisp text readability */}
-      <div className="absolute inset-0 z-0 bg-black/45" />
+      {/* Refined Directional Gradient Overlay */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-slate-950/90 via-slate-900/50 to-transparent rtl:bg-gradient-to-l" />
       <div className="absolute inset-x-0 bottom-0 z-0 h-28 bg-gradient-to-t from-[#050816] to-transparent" />
 
       {/* Foreground Content */}

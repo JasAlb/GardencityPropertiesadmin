@@ -5,7 +5,11 @@ import {
   AlertCircle,
   Building2,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
   RefreshCw,
+  Ruler,
   Square,
   X,
 } from "lucide-react";
@@ -20,6 +24,14 @@ interface Project {
   area: string;
   developer: string;
   image: string;
+  gallery_urls?: string[];
+  floor_plan_url?: string;
+  location?: string;
+  completion_date?: string;
+  construction_stage?: string;
+  status?: string;
+  type?: string;
+  structure?: string;
   description?: string;
 }
 
@@ -42,13 +54,29 @@ export default function ProjectsShowcase() {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Compute slide images for the modal
+  const modalSlides: string[] = selectedProject
+    ? selectedProject.gallery_urls && selectedProject.gallery_urls.length > 0
+      ? Array.from(new Set([selectedProject.image, ...selectedProject.gallery_urls]))
+      : [selectedProject.image]
+    : [];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setSelectedProject(null);
+      } else if (e.key === "ArrowLeft") {
+        if (modalSlides.length > 1) {
+          setCurrentSlide((prev) => (prev === 0 ? modalSlides.length - 1 : prev - 1));
+        }
+      } else if (e.key === "ArrowRight") {
+        if (modalSlides.length > 1) {
+          setCurrentSlide((prev) => (prev === modalSlides.length - 1 ? 0 : prev + 1));
+        }
       }
     };
     if (selectedProject) {
@@ -61,7 +89,7 @@ export default function ProjectsShowcase() {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [selectedProject]);
+  }, [selectedProject, modalSlides.length]);
 
   useEffect(() => {
     let ignore = false;
@@ -85,9 +113,27 @@ export default function ProjectsShowcase() {
             name: String(row.name || ""),
             price: String(row.price || ""),
             paymentPlan: String(row.payment_plan || row.paymentPlan || ""),
-            area: String(row.area || ""),
+            area: String(row.area || row.site_area || ""),
             developer: String(row.developer || ""),
             image: String(row.image || ""),
+            gallery_urls: Array.isArray(row.gallery_urls)
+              ? (row.gallery_urls as string[])
+              : Array.isArray(row.galleryUrls)
+              ? (row.galleryUrls as string[])
+              : [],
+            floor_plan_url:
+              (typeof row.floor_plan_url === "string" && row.floor_plan_url.trim()) ||
+              (typeof row.floorplan_url === "string" && row.floorplan_url.trim()) ||
+              (typeof row.floorPlanUrl === "string" && row.floorPlanUrl.trim()) ||
+              (typeof row.floor_plan === "string" && row.floor_plan.trim()) ||
+              (typeof row.floorplan === "string" && row.floorplan.trim()) ||
+              undefined,
+            location: typeof row.location === "string" ? row.location : undefined,
+            completion_date: typeof row.completion_date === "string" ? row.completion_date : undefined,
+            construction_stage: typeof row.construction_stage === "string" ? row.construction_stage : undefined,
+            status: typeof row.status === "string" ? row.status : undefined,
+            type: typeof row.type === "string" ? row.type : typeof row.property_type === "string" ? row.property_type : undefined,
+            structure: typeof row.structure === "string" ? row.structure : undefined,
             description: row.description ? String(row.description) : undefined,
           }));
           setProjects(mapped);
@@ -128,9 +174,27 @@ export default function ProjectsShowcase() {
           name: String(row.name || ""),
           price: String(row.price || ""),
           paymentPlan: String(row.payment_plan || row.paymentPlan || ""),
-          area: String(row.area || ""),
+          area: String(row.area || row.site_area || ""),
           developer: String(row.developer || ""),
           image: String(row.image || ""),
+          gallery_urls: Array.isArray(row.gallery_urls)
+            ? (row.gallery_urls as string[])
+            : Array.isArray(row.galleryUrls)
+            ? (row.galleryUrls as string[])
+            : [],
+          floor_plan_url:
+            (typeof row.floor_plan_url === "string" && row.floor_plan_url.trim()) ||
+            (typeof row.floorplan_url === "string" && row.floorplan_url.trim()) ||
+            (typeof row.floorPlanUrl === "string" && row.floorPlanUrl.trim()) ||
+            (typeof row.floor_plan === "string" && row.floor_plan.trim()) ||
+            (typeof row.floorplan === "string" && row.floorplan.trim()) ||
+            undefined,
+          location: typeof row.location === "string" ? row.location : undefined,
+          completion_date: typeof row.completion_date === "string" ? row.completion_date : undefined,
+          construction_stage: typeof row.construction_stage === "string" ? row.construction_stage : undefined,
+          status: typeof row.status === "string" ? row.status : undefined,
+          type: typeof row.type === "string" ? row.type : typeof row.property_type === "string" ? row.property_type : undefined,
+          structure: typeof row.structure === "string" ? row.structure : undefined,
           description: row.description ? String(row.description) : undefined,
         }));
         setProjects(mapped);
@@ -235,9 +299,7 @@ export default function ProjectsShowcase() {
         {!isLoading && !error && projects.length > 0 && (
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => {
-              const whatsappUrl = `https://wa.me/9689495068217?text=${encodeURIComponent(
-                `Hello Garden City, I would like more details about the ${project.name} property.`
-              )}`;
+              const whatsappUrl = "https://wa.me/message/BACRFFVZ3LOXH1";
 
               return (
                 <article
@@ -303,7 +365,10 @@ export default function ProjectsShowcase() {
                     <div className="mt-5 flex items-center gap-2.5 pt-2">
                       <button
                         type="button"
-                        onClick={() => setSelectedProject(project)}
+                        onClick={() => {
+                          setSelectedProject(project);
+                          setCurrentSlide(0);
+                        }}
                         className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-white px-4 text-xs font-semibold text-slate-950 shadow-sm transition hover:bg-slate-200 active:scale-[0.99]"
                       >
                         {copy.getDetails}
@@ -325,103 +390,277 @@ export default function ProjectsShowcase() {
           </div>
         )}
 
-      {/* Quick View Modal */}
+      {/* Quick View Bento-Box Modal */}
       {selectedProject && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6"
           onClick={() => setSelectedProject(null)}
         >
           <div
-            className="bg-slate-900 border border-slate-700/50 rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]"
+            className="bg-slate-900 border border-slate-700/60 rounded-3xl max-w-5xl w-full overflow-hidden shadow-2xl relative max-h-[92vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
+            {/* Absolute Close Button */}
             <button
               type="button"
               onClick={() => setSelectedProject(null)}
               aria-label="Close modal"
-              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-slate-800/80 text-slate-400 transition hover:bg-slate-700 hover:text-white focus:outline-none"
+              className="absolute top-4 right-4 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-slate-800/90 text-slate-400 transition hover:bg-slate-700 hover:text-white focus:outline-none shadow-md border border-white/10"
             >
               <X className="h-5 w-5" />
             </button>
 
-            {/* Left/Top: Property Image */}
-            <div className="relative h-64 w-full shrink-0 bg-slate-950 md:h-auto md:w-1/2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedProject.image}
-                alt={`${selectedProject.name} - Luxury Property in Oman developed by ${selectedProject.developer}`}
-                className="h-full w-full object-cover"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent md:hidden" />
-            </div>
-
-            {/* Right/Bottom: Property Details */}
-            <div className="flex flex-1 flex-col justify-between overflow-y-auto p-6 sm:p-8">
-              <div>
-                <span className="inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold tracking-wider text-amber-400 uppercase">
-                  {language === "ar" ? "تفاصيل المشروع" : "Property Overview"}
-                </span>
-
-                <h3 className="mt-3 font-[family-name:var(--font-outfit)] text-2xl font-bold text-amber-500 sm:text-3xl">
-                  {selectedProject.name}
-                </h3>
-
-                <p className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                  {selectedProject.price}
-                </p>
-
-                {/* Property Specs */}
-                <ul className="mt-6 space-y-3 rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-xs text-slate-400">
-                  <li className="flex items-center gap-2.5">
-                    <CalendarDays size={16} className="shrink-0 text-sky-400" />
-                    <span>
-                      <span className="text-slate-500">{copy.paymentPlan}: </span>
-                      <span className="font-semibold text-slate-200">
-                        {selectedProject.paymentPlan}
-                      </span>
+            {/* Bento Grid Two-Column Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 sm:p-7 lg:p-8">
+              
+              {/* LEFT COLUMN: Main Visual & Title */}
+              <div className="flex flex-col justify-between">
+                <div>
+                  {/* Top Tags */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1 text-xs font-semibold tracking-wider text-sky-300 uppercase">
+                      {selectedProject.type || (language === "ar" ? "مشروع متميز" : "Prime Development")}
                     </span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <Square size={16} className="shrink-0 text-sky-400" />
-                    <span>
-                      <span className="text-slate-500">{copy.startingArea}: </span>
-                      <span className="font-semibold text-slate-200">
-                        {selectedProject.area}
-                      </span>
+                    <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold tracking-wider text-emerald-300 uppercase">
+                      {selectedProject.status || (language === "ar" ? "متاح للحجز" : "Available")}
                     </span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <Building2 size={16} className="shrink-0 text-sky-400" />
-                    <span>
-                      <span className="text-slate-500">{copy.developer}: </span>
-                      <span className="font-semibold text-slate-200">
-                        {selectedProject.developer}
-                      </span>
-                    </span>
-                  </li>
-                </ul>
+                  </div>
 
-                {/* Expanded Description */}
-                <div className="mt-6">
-                  <h4 className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
-                    {language === "ar" ? "نبذة عن العقار" : "About This Property"}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                    {selectedProject.description ||
-                      (language === "ar"
-                        ? `مشروع ${selectedProject.name} من تطوير شركة ${selectedProject.developer}. يقدم فرصة استثمارية وسكنية متميزة في سلطنة عمان بمواصفات عالية وخطط سداد مرنة.`
-                        : `Experience premium living and investment potential with ${selectedProject.name}, developed by ${selectedProject.developer}. Strategically situated in Oman, offering superior architectural craftsmanship, modern amenities, and attractive payment arrangements.`)}
+                  {/* Title */}
+                  <h3 className="mt-3 font-[family-name:var(--font-outfit)] text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                    {selectedProject.name}
+                  </h3>
+
+                  {/* Developer Subtitle */}
+                  <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                    <Building2 className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                    <span>{selectedProject.developer}</span>
                   </p>
                 </div>
+
+                {/* Main Visual Image (with slideshow support if gallery exists) */}
+                <div className="relative mt-4 h-72 sm:h-80 lg:h-[390px] w-full shrink-0 overflow-hidden rounded-2xl bg-slate-950 border border-white/10 shadow-lg select-none">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    key={modalSlides[currentSlide] || selectedProject.image}
+                    src={modalSlides[currentSlide] || selectedProject.image}
+                    alt={`${selectedProject.name} - View ${currentSlide + 1}`}
+                    className="h-full w-full object-cover transition-opacity duration-300"
+                  />
+
+                  {/* Absolute White "Location" Badge Overlapping Bottom-Left */}
+                  <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-slate-950 shadow-2xl backdrop-blur-md">
+                    <MapPin className="h-4 w-4 text-sky-600 shrink-0" />
+                    <span>{selectedProject.location || "Muscat, Oman"}</span>
+                  </div>
+
+                  {/* Carousel Controls if multiple images exist */}
+                  {modalSlides.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentSlide((prev) =>
+                            prev === 0 ? modalSlides.length - 1 : prev - 1,
+                          );
+                        }}
+                        aria-label="Previous photo"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-950/70 text-white backdrop-blur-md transition hover:bg-slate-900 border border-white/10"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentSlide((prev) =>
+                            prev === modalSlides.length - 1 ? 0 : prev + 1,
+                          );
+                        }}
+                        aria-label="Next photo"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-950/70 text-white backdrop-blur-md transition hover:bg-slate-900 border border-white/10"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+
+                      <div className="absolute top-3 left-3 z-10 rounded-full bg-slate-950/80 px-2 py-0.5 text-[10px] font-semibold text-slate-200 backdrop-blur-md border border-white/10">
+                        {currentSlide + 1} / {modalSlides.length}
+                      </div>
+
+                      {/* Dot Indicators */}
+                      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5">
+                        {modalSlides.map((_, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentSlide(idx);
+                            }}
+                            aria-label={`Go to slide ${idx + 1}`}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              idx === currentSlide
+                                ? "w-5 bg-amber-400"
+                                : "w-1.5 bg-white/60 hover:bg-white"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Brief description */}
+                <p className="mt-3 text-xs leading-relaxed text-slate-400 line-clamp-2">
+                  {selectedProject.description ||
+                    (language === "ar"
+                      ? `فرصة استثمارية وسكنية متميزة من تطوير ${selectedProject.developer} بموقع استراتيجي في سلطنة عمان.`
+                      : `Premium real estate opportunity developed by ${selectedProject.developer} in prime location across Oman.`)}
+                </p>
               </div>
 
-              {/* Bright "Register Interest via WhatsApp" CTA button */}
-              <div className="mt-8 pt-4 border-t border-slate-800">
+              {/* RIGHT COLUMN: Bento Grid Data */}
+              <div className="flex flex-col justify-between gap-3.5">
+                
+                {/* 1. TOP ROW: Completion Date & Status */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 backdrop-blur-md flex flex-col justify-between">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      {language === "ar" ? "تاريخ الإنجاز" : "Completion Date"}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <CalendarDays className="h-4 w-4 text-sky-400 shrink-0" />
+                      <p className="font-[family-name:var(--font-outfit)] text-base sm:text-lg font-bold text-white truncate">
+                        {selectedProject.completion_date || "Q4 2026"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-4 backdrop-blur-md flex flex-col justify-between">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+                      {language === "ar" ? "حالة المشروع" : "Status"}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                      <p className="font-[family-name:var(--font-outfit)] text-base sm:text-lg font-bold text-emerald-200 truncate">
+                        {selectedProject.status || (language === "ar" ? "متاح للحجز" : "Available")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. MIDDLE SECTION: Bento Grid for Site Area, Construction Stage, Type, Structure */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {/* Site Area Card */}
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3.5 flex flex-col justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                      {language === "ar" ? "المساحة" : "Site Area"}
+                    </span>
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <Square className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                      <span className="font-[family-name:var(--font-outfit)] text-sm font-bold text-white truncate">
+                        {selectedProject.area}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Construction Stage Card (Highlighted solid orange accent) */}
+                  <div className="rounded-2xl bg-amber-500 p-3.5 text-slate-950 shadow-[0_0_24px_rgba(245,158,11,0.25)] flex flex-col justify-between">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-950">
+                      {language === "ar" ? "مرحلة البناء" : "Construction Stage"}
+                    </span>
+                    <p className="mt-1 font-[family-name:var(--font-outfit)] text-sm font-black text-slate-950 truncate">
+                      {selectedProject.construction_stage || (language === "ar" ? "قيد الإنشاء" : "Under Construction")}
+                    </p>
+                  </div>
+
+                  {/* Type Card */}
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3.5 flex flex-col justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                      {language === "ar" ? "النوع" : "Type"}
+                    </span>
+                    <p className="mt-1 font-[family-name:var(--font-outfit)] text-sm font-bold text-white truncate">
+                      {selectedProject.type || (language === "ar" ? "سكني" : "Residential")}
+                    </p>
+                  </div>
+
+                  {/* Structure Card */}
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3.5 flex flex-col justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                      {language === "ar" ? "الهيكل" : "Structure"}
+                    </span>
+                    <p className="mt-1 font-[family-name:var(--font-outfit)] text-sm font-bold text-white truncate">
+                      {selectedProject.structure || "G + 2"}
+                    </p>
+                  </div>
+
+                  {/* Developer Card */}
+                  <div className="col-span-2 sm:col-span-2 rounded-2xl border border-white/10 bg-slate-950/60 p-3.5 flex flex-col justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                      {copy.developer}
+                    </span>
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <Building2 className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                      <span className="font-[family-name:var(--font-outfit)] text-sm font-bold text-white truncate">
+                        {selectedProject.developer}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. BOTTOM SECTION: Floor Plan Card (Floor Plan on left, Price & Details on right) */}
+                <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 backdrop-blur-md">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    {/* Floor Plan Visual */}
+                    <div className="relative h-28 w-full sm:w-36 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-900 flex items-center justify-center group/fp">
+                      {selectedProject.floor_plan_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={selectedProject.floor_plan_url}
+                          alt="Floor Plan"
+                          className="w-full h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center p-3 text-center text-slate-500">
+                          <Ruler className="h-6 w-6 text-emerald-400 mb-1" />
+                          <span className="text-[10px] font-medium text-slate-400">
+                            {language === "ar" ? "مخطط الطابق" : "Floor Plan"}
+                          </span>
+                        </div>
+                      )}
+                      <span className="absolute bottom-1 right-1 rounded bg-slate-950/85 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-300 backdrop-blur-sm border border-emerald-500/20">
+                        {language === "ar" ? "مخطط الطابق" : "Floor Plan"}
+                      </span>
+                    </div>
+
+                    {/* Price & Specs */}
+                    <div className="flex-1 w-full flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
+                          {language === "ar" ? "السعر الابتدائي" : "Starting Price"}
+                        </span>
+                        <p className="font-[family-name:var(--font-outfit)] text-2xl sm:text-3xl font-extrabold text-amber-400">
+                          {selectedProject.price}
+                        </p>
+                      </div>
+
+                      <div className="mt-2 flex items-center gap-2.5 text-xs text-slate-300">
+                        <span className="inline-flex items-center gap-1">
+                          <Square className="h-3 w-3 text-sky-400" />
+                          <span>{selectedProject.area}</span>
+                        </span>
+                        <span className="text-slate-600">•</span>
+                        <span>{selectedProject.paymentPlan}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* WhatsApp Action CTA Button */}
                 <a
-                  href={`https://wa.me/9689495068217?text=${encodeURIComponent(
-                    `Hello Garden City, I would like more details about the ${selectedProject.name} property.`
-                  )}`}
+                  href="https://wa.me/message/BACRFFVZ3LOXH1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400 active:scale-[0.99]"
