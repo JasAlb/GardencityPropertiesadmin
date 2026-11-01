@@ -32,7 +32,7 @@ export default function Footer() {
     },
     {
       name: "Instagram",
-      href: "https://instagram.com",
+      href: "https://www.instagram.com/gardencity.llc?vrfl=MXA4dmpqbnloeWIzMw==",
       icon: (
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path

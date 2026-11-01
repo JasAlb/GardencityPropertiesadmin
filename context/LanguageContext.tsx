@@ -62,6 +62,7 @@ const dictionaries = {
           email: "gardencityin@gmail.com",
           phone: "+968 97300200",
           phoneHref: "tel:+96897300200",
+          whatsappHref: undefined as string | undefined,
         },
         {
           src: "/GM.jpeg",
@@ -77,6 +78,7 @@ const dictionaries = {
           email: "gardencityin@gmail.com",
           phone: "+968 77304446",
           phoneHref: "tel:+96877304446",
+          whatsappHref: "https://wa.me/message/7HZWGQYG6I5GC1",
         },
       ],
     },
@@ -210,6 +212,7 @@ const dictionaries = {
           email: "gardencityin@gmail.com",
           phone: "+968 97300200",
           phoneHref: "tel:+96897300200",
+          whatsappHref: undefined as string | undefined,
         },
         {
           src: "/GM.jpeg",
@@ -225,6 +228,7 @@ const dictionaries = {
           email: "gardencityin@gmail.com",
           phone: "+968 77304446",
           phoneHref: "tel:+96877304446",
+          whatsappHref: "https://wa.me/message/7HZWGQYG6I5GC1",
         },
       ],
     },
