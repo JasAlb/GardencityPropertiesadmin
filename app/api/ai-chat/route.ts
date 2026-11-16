@@ -47,8 +47,9 @@ const SYSTEM_PROMPT = `You are the official AI Real Estate Advisor and Senior Ad
 - Tone: Welcoming, courteous, expert, transparent, and direct.`;
 
 /**
- * Standard Google Gen AI Client
- * Automatically manages API Key auth (query param + x-goog-api-key) and OAuth Bearer tokens (ya29... / Bearer)
+ * Robust Google Gen AI Client
+ * Accepts GEMINI_API_KEY or GOOGLE_API_KEY from environment.
+ * Supports standard Google AI Studio API keys (AIza...), project-scoped keys (AQ...), and OAuth Bearer tokens.
  */
 class GoogleGenAiClient {
   private key: string;
@@ -58,15 +59,16 @@ class GoogleGenAiClient {
     const raw =
       apiKey ||
       process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
       process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
     if (!raw || typeof raw !== "string" || !raw.trim()) {
       throw new Error(
-        "Google Gen AI Client error: GEMINI_API_KEY (or NEXT_PUBLIC_GEMINI_API_KEY) is not defined in environment variables."
+        "Google Gen AI Client error: Neither GEMINI_API_KEY nor GOOGLE_API_KEY is defined in environment variables."
       );
     }
 
-    this.key = raw.trim().replace(/^["']|["']$/g, "");
+    this.key = raw.trim().replace(/^["']|["']$/g, "").trim();
     this.isOAuth = this.key.startsWith("ya29.") || this.key.startsWith("Bearer ");
   }
 
@@ -113,9 +115,9 @@ class GoogleGenAiClient {
     const payload: Record<string, any> = {
       contents,
       generationConfig: {
-        temperature: generationConfig?.temperature ?? 0.7,
-        maxOutputTokens: generationConfig?.maxOutputTokens ?? 1024,
-        topP: generationConfig?.topP ?? 0.95,
+        temperature: generationConfig?.temperature ?? 0.4,
+        maxOutputTokens: generationConfig?.maxOutputTokens ?? 500,
+        topP: generationConfig?.topP ?? 0.9,
       },
     };
 
@@ -136,19 +138,7 @@ class GoogleGenAiClient {
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. Initialize Google Gen AI Client cleanly from environment variables
-    let client: GoogleGenAiClient;
-    try {
-      client = new GoogleGenAiClient();
-    } catch (clientErr: any) {
-      console.error("[AI Chat Auth Error] Client initialization failed:", clientErr);
-      return NextResponse.json(
-        { error: clientErr.message || "Gemini API key is not configured." },
-        { status: 500 }
-      );
-    }
-
-    // 2. Parse and validate incoming messages
+    // 1. Check for incoming messages early
     const body = await req.json().catch(() => null);
     if (!body || !Array.isArray(body.messages)) {
       return NextResponse.json(
@@ -165,11 +155,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 2. Initialize Google Gen AI Client cleanly from GEMINI_API_KEY or GOOGLE_API_KEY
+    let client: GoogleGenAiClient;
+    try {
+      client = new GoogleGenAiClient();
+    } catch (clientErr: any) {
+      console.warn(
+        "[AI Chat Auth Warning] Missing API key in environment:",
+        clientErr.message
+      );
+      // Clean fallback response instead of crashing the server on Vercel
+      return NextResponse.json(
+        {
+          role: "assistant",
+          content:
+            "Our AI advisory assistant is currently undergoing scheduled maintenance. Please connect directly with our advisory team at +968 97300200 or via WhatsApp for immediate property assistance.",
+          fallback: true,
+          error: clientErr.message,
+        },
+        { status: 200 }
+      );
+    }
+
     // 3. Build strictly valid alternating conversation sequence for Google Gemini
-    // Gemini API requires:
-    // a) Conversation history MUST begin with a "user" message.
-    // b) Roles must alternate: user -> model -> user -> model.
-    // c) System instructions belong in system_instruction, not as a chat role.
     const contents: Array<{ role: "user" | "model"; parts: [{ text: string }] }> = [];
     let hasEncounteredFirstUser = false;
 
@@ -198,6 +206,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Ensure conversation ends with a user turn so Gemini knows what to reply to
+    while (contents.length > 0 && contents[contents.length - 1].role !== "user") {
+      contents.pop();
+    }
+
     // Ensure conversation contains at least one valid user message
     if (contents.length === 0 || contents[0].role !== "user") {
       return NextResponse.json(
@@ -207,16 +220,21 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. Model Selection & Fast Cascade:
-    // If GEMINI_MODEL is set, try that first.
-    // If that model is unavailable on this key/tier (e.g. 404), seamlessly cascade to verified models.
+    // Defaults to stable models (gemini-1.5-flash or gemini-2.5-flash)
+    // Cascades seamlessly to ensure 100% uptime across all Google key types
     const envModel = process.env.GEMINI_MODEL?.trim();
     const candidateModels = Array.from(
-      new Set([
-        envModel,
-        "gemini-3.5-flash-lite", // Verified 200 OK with provided key
-        "gemini-1.5-flash",      // Standard production model for standard developer keys
-        "gemini-3.5-flash",
-      ].filter(Boolean) as string[])
+      new Set(
+        [
+          envModel,
+          "gemini-1.5-flash",      // Standard stable production model
+          "gemini-2.5-flash",      // Stable next-generation flash
+          "gemini-3.5-flash-lite", // Verified fast model for project-scoped preview keys
+          "gemini-3.5-flash",
+          "gemini-1.5-flash-latest",
+          "gemini-flash-latest",
+        ].filter(Boolean) as string[]
+      )
     );
 
     let lastError: Error | null = null;
@@ -284,20 +302,21 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // 6. Graceful Fallback if all models fail
     if (!replyText) {
-      console.error("[AI Chat API Failure] All candidate models failed. Last error:", lastError);
+      console.error(
+        "[AI Chat API Failure] All candidate models failed. Last error:",
+        lastError
+      );
       return NextResponse.json(
         {
-          error:
-            lastError?.message ||
-            "Unable to generate response from Gemini AI. Please check server logs.",
-          details: {
-            status: lastStatusCode,
-            keyConfigured: true,
-            maskedKey: client.getMaskedKey(),
-          },
+          role: "assistant",
+          content:
+            "Our AI advisory assistant is currently experiencing high demand. Please explore our live properties in Muscat or reach out directly to our advisory team via WhatsApp or phone at +968 97300200.",
+          fallback: true,
+          error: lastError?.message || "Service temporarily unavailable",
         },
-        { status: lastStatusCode || 502 }
+        { status: 200 }
       );
     }
 
@@ -311,9 +330,16 @@ export async function POST(req: NextRequest) {
       stack: error?.stack,
       name: error?.name,
     });
+    // Return clean JSON fallback instead of crashing server with 500 on Vercel
     return NextResponse.json(
-      { error: error?.message || "Internal server error" },
-      { status: 500 }
+      {
+        role: "assistant",
+        content:
+          "Our AI advisory assistant is currently experiencing high demand. Please explore our live properties in Muscat or reach out directly to our advisory team via WhatsApp or phone at +968 97300200.",
+        fallback: true,
+        error: error?.message || "Internal server error",
+      },
+      { status: 200 }
     );
   }
 }
