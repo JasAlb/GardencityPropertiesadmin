@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { LanguageProvider, type Language } from "@/context/LanguageContext";
 import LanguageShell from "@/components/LanguageShell";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import AiAssistant from "@/components/AiAssistant";
 
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "ar" }];
@@ -197,6 +198,7 @@ export default async function LocaleLayout({
       <LanguageShell locale={lang}>
         {children}
         <FloatingWhatsApp />
+        <AiAssistant />
       </LanguageShell>
     </LanguageProvider>
   );
