@@ -16,114 +16,34 @@ export default function Hero() {
 
   const whyInvestLeft = isAr
     ? [
-        {
-          num: "01",
-          title: "الاستقرار السياسي والأمني",
-          desc: "بيئة استثمارية آمنة ومستقرة تحمي وتنمي أصولك.",
-        },
-        {
-          num: "02",
-          title: "اقتصاد متنامٍ",
-          desc: "اقتصاد واعد يزخر بالفرص الاستثمارية الواعدة.",
-        },
-        {
-          num: "03",
-          title: "رؤية عُمان 2040",
-          desc: "رؤية وطنية طموحة تقود مسيرة النمو والتنمية المستدامة.",
-        },
-        {
-          num: "04",
-          title: "التملك الحر",
-          desc: "فرص تملك حر للمستثمرين الأجانب في المشاريع المعتمدة.",
-        },
-        {
-          num: "05",
-          title: "نمو رأس المال",
-          desc: "إمكانات تصاعدية واعدة لنمو قيمة العقارات على المدى الطويل.",
-        },
+        { num: "01", title: "الاستقرار السياسي والأمني" },
+        { num: "02", title: "اقتصاد متنامٍ" },
+        { num: "03", title: "رؤية عُمان 2040" },
+        { num: "04", title: "التملك الحر" },
+        { num: "05", title: "نمو رأس المال" },
       ]
     : [
-        {
-          num: "01",
-          title: "Political Stability & Security",
-          desc: "A safe and stable investment environment.",
-        },
-        {
-          num: "02",
-          title: "Growing Economy",
-          desc: "A developing economy with promising opportunities.",
-        },
-        {
-          num: "03",
-          title: "Oman Vision 2040",
-          desc: "A strong vision for sustainable growth and development.",
-        },
-        {
-          num: "04",
-          title: "Freehold Ownership",
-          desc: "Foreign ownership opportunities in approved developments.",
-        },
-        {
-          num: "05",
-          title: "Capital Appreciation",
-          desc: "Potential for long-term property value growth.",
-        },
+        { num: "01", title: "Political Stability & Security" },
+        { num: "02", title: "Growing Economy" },
+        { num: "03", title: "Oman Vision 2040" },
+        { num: "04", title: "Freehold Ownership" },
+        { num: "05", title: "Capital Appreciation" },
       ];
 
   const whyInvestRight = isAr
     ? [
-        {
-          num: "06",
-          title: "عوائد إيجارية مجزية",
-          desc: "فرص استثمارية لتوليد دخل إيجاري دوري ومستمر.",
-        },
-        {
-          num: "07",
-          title: "مدن المستقبل",
-          desc: "مشاريع تطويرية ملهمة ومجتمعات عصرية متكاملة.",
-        },
-        {
-          num: "08",
-          title: "موقع استراتيجي",
-          desc: "بوابة لوجستية حيوية تربط آسيا وأوروبا وأفريقيا.",
-        },
-        {
-          num: "09",
-          title: "جودة الحياة",
-          desc: "نمط حياة هادئ ومريح وسط طبيعة ساحرة ومجتمع راقٍ.",
-        },
-        {
-          num: "10",
-          title: "فرص استثمارية متنوعة",
-          desc: "من الوجهات الفاخرة إلى المشاريع التطويرية الصاعدة.",
-        },
+        { num: "06", title: "عوائد إيجارية مجزية" },
+        { num: "07", title: "مدن المستقبل" },
+        { num: "08", title: "موقع استراتيجي" },
+        { num: "09", title: "جودة الحياة" },
+        { num: "10", title: "فرص استثمارية متنوعة" },
       ]
     : [
-        {
-          num: "06",
-          title: "Rental Returns",
-          desc: "Opportunities to generate regular rental income.",
-        },
-        {
-          num: "07",
-          title: "Future Cities",
-          desc: "Exciting developments and modern communities.",
-        },
-        {
-          num: "08",
-          title: "Strategic Location",
-          desc: "A gateway connecting Asia, Europe and Africa.",
-        },
-        {
-          num: "09",
-          title: "Quality of Life",
-          desc: "A peaceful lifestyle with beautiful surroundings.",
-        },
-        {
-          num: "10",
-          title: "Diverse Investment Opportunities",
-          desc: "From luxury destinations to emerging developments.",
-        },
+        { num: "06", title: "Rental Returns" },
+        { num: "07", title: "Future Cities" },
+        { num: "08", title: "Strategic Location" },
+        { num: "09", title: "Quality of Life" },
+        { num: "10", title: "Diverse Investment Opportunities" },
       ];
 
   return (
@@ -195,47 +115,37 @@ export default function Hero() {
             {isAr ? "لماذا الاستثمار في عُمان؟" : "Why Invest in Oman"}
           </h2>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5">
             {/* Left Column (Points 1–5) */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
               {whyInvestLeft.map((point) => (
                 <div
                   key={point.num}
-                  className="flex items-start gap-3 rounded-2xl border border-white/5 bg-white/[0.03] p-3 sm:p-3.5 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
+                  className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/30 text-xs font-bold text-sky-300">
                     {point.num}
                   </span>
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
-                      {point.title}
-                    </h3>
-                    <p className="mt-0.5 text-xs text-slate-300 leading-relaxed rtl:font-[family-name:var(--font-cairo)]">
-                      {point.desc}
-                    </p>
-                  </div>
+                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
+                    {point.title}
+                  </h3>
                 </div>
               ))}
             </div>
 
             {/* Right Column (Points 6–10) */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
               {whyInvestRight.map((point) => (
                 <div
                   key={point.num}
-                  className="flex items-start gap-3 rounded-2xl border border-white/5 bg-white/[0.03] p-3 sm:p-3.5 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
+                  className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/30 text-xs font-bold text-sky-300">
                     {point.num}
                   </span>
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
-                      {point.title}
-                    </h3>
-                    <p className="mt-0.5 text-xs text-slate-300 leading-relaxed rtl:font-[family-name:var(--font-cairo)]">
-                      {point.desc}
-                    </p>
-                  </div>
+                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
+                    {point.title}
+                  </h3>
                 </div>
               ))}
             </div>

@@ -4030,6 +4030,9 @@
     .sm\:gap-3 {
       gap: calc(var(--spacing) * 3);
     }
+    .sm\:gap-3\.5 {
+      gap: calc(var(--spacing) * 3.5);
+    }
     .sm\:gap-4 {
       gap: calc(var(--spacing) * 4);
     }
@@ -4038,9 +4041,6 @@
     }
     .sm\:self-center {
       align-self: center;
-    }
-    .sm\:p-3\.5 {
-      padding: calc(var(--spacing) * 3.5);
     }
     .sm\:p-4 {
       padding: calc(var(--spacing) * 4);
