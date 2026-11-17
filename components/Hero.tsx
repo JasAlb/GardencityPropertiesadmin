@@ -47,32 +47,24 @@ export default function Hero() {
       ];
 
   return (
-    <section id="home" className="relative isolate min-h-[92vh] overflow-hidden m-0 -mt-[1px]">
-      {/* Background Image Container with Cinematic Zoom */}
-      <div className="absolute inset-0 z-0 bg-[#050816] overflow-hidden">
-        <motion.div
-          className="relative h-full w-full"
-          initial={{ scale: shouldReduceMotion ? 1 : 1.07 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <Image
-            src="/Oasis Fortress at Dusk.png"
-            alt="Garden City Properties - Premium Real Estate Consultancy and Property Brokerage in Oman"
-            fill
-            priority={true}
-            quality={90}
-            sizes="100vw"
-            className="object-cover object-[65%_center] md:object-center brightness-[0.92] contrast-[1.08]"
-          />
-        </motion.div>
+    <section
+      id="home"
+      className="relative isolate min-h-[92vh] overflow-hidden m-0 -mt-[1px] bg-[#050816]"
+    >
+      {/* Background Image - Next.js Image positioned right behind hero and section content */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <Image
+          src="/Mainbg.jpeg"
+          alt="Garden City Properties - Premium Real Estate Consultancy and Property Brokerage in Oman"
+          fill
+          priority={true}
+          quality={95}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, (max-width: 1920px) 100vw, 100vw"
+          className="object-cover object-center brightness-105 contrast-[1.02]"
+        />
+        {/* Soft, uniform background tint so sunset and cliffside view remains bright and clear */}
+        <div className="absolute inset-0 bg-black/30" />
       </div>
-
-      {/* Refined Luxury Dark Overlays for Peak Legibility & Contrast */}
-      <div className="absolute inset-0 z-0 bg-slate-950/35" />
-      <div className="absolute inset-0 z-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/20 rtl:bg-gradient-to-l" />
-      <div className="absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/80 via-slate-950/30 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 z-0 h-32 bg-gradient-to-t from-[#050816] via-[#050816]/70 to-transparent" />
 
       {/* Foreground Content */}
       <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 py-24 sm:py-28 md:px-8">
@@ -80,11 +72,11 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: luxuryEase }}
-          className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-[0.22em] text-sky-300 uppercase backdrop-blur-md rtl:tracking-normal rtl:font-[family-name:var(--font-cairo)]"
+          className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-slate-950/60 px-4 py-1.5 text-xs font-semibold tracking-[0.22em] text-sky-300 uppercase backdrop-blur-md shadow-lg rtl:tracking-normal rtl:font-[family-name:var(--font-cairo)]"
         >
           {copy.badge}
         </motion.p>
-        <h1 className="max-w-4xl font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.12] tracking-normal sm:tracking-tight text-white drop-shadow-md rtl:font-[family-name:var(--font-cairo)] rtl:leading-snug rtl:tracking-normal rtl:font-bold">
+        <h1 className="max-w-4xl font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.12] tracking-normal sm:tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] rtl:font-[family-name:var(--font-cairo)] rtl:leading-snug rtl:tracking-normal rtl:font-bold">
           <span className="inline-block animate-hero-title">
             {copy.title}
           </span>
@@ -93,17 +85,17 @@ export default function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.22, ease: luxuryEase }}
-          className="mt-6 max-w-2xl font-sans text-base sm:text-lg lg:text-xl leading-relaxed text-slate-200/90 font-normal rtl:font-[family-name:var(--font-cairo)]"
+          className="mt-6 max-w-2xl font-sans text-base sm:text-lg lg:text-xl leading-relaxed text-slate-100 font-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] rtl:font-[family-name:var(--font-cairo)]"
         >
           {copy.subtitle}
         </motion.p>
 
-        {/* Why Invest in Oman Section (Two-Column Grid Layout) */}
+        {/* Why Invest in Oman Section (Two-Column Grid Layout with Translucent Glassmorphism) */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.28, ease: luxuryEase }}
-          className="my-8 sm:my-10 max-w-5xl rounded-3xl border border-white/10 bg-slate-950/75 p-6 sm:p-8 backdrop-blur-xl shadow-2xl"
+          className="my-8 sm:my-10 max-w-5xl rounded-3xl border border-white/10 bg-slate-950/40 p-6 sm:p-8 backdrop-blur-md shadow-2xl"
         >
           <div className="flex items-center gap-2">
             <span className="inline-block rounded-full border border-sky-400/30 bg-sky-500/10 px-3.5 py-1 text-[11px] font-semibold tracking-wider text-sky-300 uppercase rtl:tracking-normal rtl:font-[family-name:var(--font-cairo)]">
@@ -121,12 +113,12 @@ export default function Hero() {
               {whyInvestLeft.map((point) => (
                 <div
                   key={point.num}
-                  className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
+                  className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm transition-all duration-300 hover:border-sky-400/40 hover:bg-white/10 hover:shadow-[0_4px_20px_rgba(56,189,248,0.15)]"
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/30 text-xs font-bold text-sky-300">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-400/30 text-xs font-bold text-sky-300 transition-colors duration-300 group-hover:bg-sky-500/25 group-hover:border-sky-400/50">
                     {point.num}
                   </span>
-                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
+                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-sm rtl:font-[family-name:var(--font-cairo)]">
                     {point.title}
                   </h3>
                 </div>
@@ -138,12 +130,12 @@ export default function Hero() {
               {whyInvestRight.map((point) => (
                 <div
                   key={point.num}
-                  className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.06]"
+                  className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm transition-all duration-300 hover:border-sky-400/40 hover:bg-white/10 hover:shadow-[0_4px_20px_rgba(56,189,248,0.15)]"
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/30 text-xs font-bold text-sky-300">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-400/30 text-xs font-bold text-sky-300 transition-colors duration-300 group-hover:bg-sky-500/25 group-hover:border-sky-400/50">
                     {point.num}
                   </span>
-                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide rtl:font-[family-name:var(--font-cairo)]">
+                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-sm rtl:font-[family-name:var(--font-cairo)]">
                     {point.title}
                   </h3>
                 </div>
@@ -152,7 +144,7 @@ export default function Hero() {
           </div>
 
           {/* Closing Summary Block */}
-          <div className="mt-6 rounded-2xl border border-sky-400/30 bg-gradient-to-r from-sky-500/15 via-cyan-500/10 to-transparent p-4 sm:p-5 text-center sm:text-start">
+          <div className="mt-6 rounded-2xl border border-sky-400/30 bg-gradient-to-r from-sky-500/15 via-cyan-500/10 to-white/5 p-4 sm:p-5 text-center sm:text-start backdrop-blur-sm">
             <p className="font-[family-name:var(--font-outfit)] text-xs sm:text-sm font-extrabold tracking-wider text-sky-200 uppercase rtl:font-[family-name:var(--font-cairo)]">
               {isAr
                 ? "استثمر في عُمان اليوم.. وامتلك جزءاً من المستقبل."
